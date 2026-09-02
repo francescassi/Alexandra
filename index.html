@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Song for u</title>
 
+  <!-- Tambahan Google Fonts untuk gaya font yang elegan & latin -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400&display=swap" rel="stylesheet">
+
   <style>
     body{
       margin:0;
@@ -13,7 +18,7 @@
       place-items:center;
       background:#0b0b0b;
       color:#ddd;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       padding: 24px;
     }
 
@@ -38,6 +43,7 @@
       font-size:18px;
       font-weight:700;
       color:#eaeaea;
+      font-family: ui-monospace, monospace;
     }
 
     .hint{
@@ -45,6 +51,7 @@
       opacity:.75;
       line-height:1.5;
       margin-top:10px;
+      font-family: ui-monospace, monospace;
     }
 
     .vinyl-player {
@@ -55,44 +62,45 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
       position: relative;
     }
 
+    /* Bagian lirik tanpa kotak, font elegan warna putih */
     .lcdOverlay{
       width: 100%;
-      height: 75px;
-      background: rgba(5, 20, 30, .85);
-      border: 2px solid #222;
-      border-radius: 10px;
-      box-shadow:
-        0 0 0 2px rgba(0,255,180,.10) inset,
-        0 0 18px rgba(0,255,180,.12);
-      padding: 6px 10px;
-      color: #b9fff0;
-      text-shadow: 0 0 10px rgba(0,255,180,.18);
+      height: 70px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0 10px;
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 4px;
+      align-items: center;
+      gap: 6px;
       overflow: hidden;
       box-sizing: border-box;
     }
 
     .lcdLine{
-      font-size: 13px;
+      font-family: 'Playfair Display', serif; /* Font elegan ala latin/serif */
+      font-style: italic; /* Kesan estetik */
+      font-size: 15px;
       line-height: 1.4;
       text-align: center;
       width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: clip;
-      letter-spacing: 0px;
-      min-height: 18px;
+      letter-spacing: 0.5px;
+      min-height: 20px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
     .cursor::after{
-      content:"▋";
+      content:"|";
       margin-left:4px;
       opacity:.8;
       animation: blink 0.8s steps(1,end) infinite;
@@ -138,7 +146,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Label tengah yang berisi gambar/foto */
     .vinyl-label {
       width: 65px;
       height: 65px;
@@ -157,11 +164,13 @@
       object-fit: cover;
     }
 
-    /* Lubang tengah vinyl di atas gambar */
     .vinyl-center-hole {
       position: absolute;
-      width: 12px;
-      height: 12px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
       background: #0f0f0f;
       border: 2px solid #333;
       border-radius: 50%;
@@ -183,12 +192,14 @@
       padding:10px 12px;
       border-radius:10px;
       cursor:pointer;
+      font-family: ui-monospace, monospace;
     }
     button:hover{ border-color:#3b3b3b; }
 
     .time{
       font-size:12px;
       opacity:.85;
+      font-family: ui-monospace, monospace;
     }
 
     audio{
@@ -216,7 +227,6 @@
         <div class="vinyl-container">
           <div class="vinyl-disc spin" id="vinylDisc">
             <div class="vinyl-label">
-              <!-- Ganti "foto-kamu.jpg" dengan file gambar kamu -->
               <img src="foto-kamu.jpg" alt="Label Vinyl" />
               <div class="vinyl-center-hole"></div>
             </div>
@@ -251,7 +261,7 @@ But honestly, every line reminds me of you. Guess that’s what this song does.
 
   <script>
     const lyrics = [
-      [0.0,  "HELLO BUB", "This song is for you"],
+      [0.0,  "Sayang...", "This song is for you"],
       [0.2,  "Just like a certain", "motorbike gang from Charming"],
       [9.0,  "Or you're looking for", "the old ultraviolence"],
       [15.0, "You're trouble", "yes I knew"],
