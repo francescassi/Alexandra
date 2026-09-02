@@ -6,10 +6,6 @@
   <title>Song for u</title>
 
   <style>
-    *{
-      box-sizing: border-box;
-    }
-
     body{
       margin:0;
       min-height:100vh;
@@ -18,7 +14,7 @@
       background:#0b0b0b;
       color:#ddd;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      padding:24px;
+      padding: 24px;
     }
 
     .wrap{
@@ -35,7 +31,6 @@
       border-radius:16px;
       padding:16px;
       box-shadow: 0 10px 30px rgba(0,0,0,.55);
-      overflow:hidden;
     }
 
     h1{
@@ -52,56 +47,50 @@
       margin-top:10px;
     }
 
-    .arduino{
-      position:relative;
-      width:100%;
+    /* Container Vinyl Player */
+    .vinyl-player {
+      background: #141414;
+      border: 1px solid #262626;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: relative;
     }
 
-    .arduino img{
-      width:100%;
-      display:block;
-      border-radius:14px;
-      border:1px solid #222;
-    }
-
+    /* Layar LCD untuk Lirik */
     .lcdOverlay{
-      position:absolute;
-      top:66%;
-      left:66%;
-      width:43%;
-      height:18%;
-      transform:translate(-50%, -50%);
-
-      background: rgba(5, 20, 30, .45);
-      border: 2px solid rgba(0,0,0,.55);
+      width: 100%;
+      height: 75px;
+      background: rgba(5, 20, 30, .85);
+      border: 2px solid #222;
       border-radius: 10px;
       box-shadow:
         0 0 0 2px rgba(0,255,180,.10) inset,
         0 0 18px rgba(0,255,180,.12);
-
-      padding:2px 4px;
-      color:#b9fff0;
-      text-shadow:0 0 10px rgba(0,255,180,.18);
-
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:4px;
-
-      overflow:hidden;
-      pointer-events:none;
+      padding: 6px 10px;
+      color: #b9fff0;
+      text-shadow: 0 0 10px rgba(0,255,180,.18);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      overflow: hidden;
+      box-sizing: border-box;
     }
 
     .lcdLine{
-      font-size:13px;
-      line-height:1.3;
-      text-align:center;
-      width:100%;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:clip;
-      letter-spacing:0;
-      min-height:16px;
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+      letter-spacing: 0px;
+      min-height: 18px;
     }
 
     .cursor::after{
@@ -110,10 +99,66 @@
       opacity:.8;
       animation: blink 0.8s steps(1,end) infinite;
     }
-
     @keyframes blink{
-      0%,50% { opacity:0.8; }
-      51%,100% { opacity:0; }
+      0%,50% { opacity:0.8 }
+      51%,100% { opacity:0 }
+    }
+
+    /* Visual Piringan Hitam (Vinyl) */
+    .vinyl-container {
+      width: 160px;
+      height: 160px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .vinyl-disc {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #111 0%, #111 30%, #222 31%, #0b0b0b 33%, #1a1a1a 60%, #000 100%);
+      border-radius: 50%;
+      border: 2px solid #333;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Animasi Putar */
+    .vinyl-disc.spin {
+      animation: rotateVinyl 3s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl-disc.spin.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes rotateVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Label Tengah Vinyl */
+    .vinyl-label {
+      width: 55px;
+      height: 55px;
+      background: #e63946;
+      border-radius: 50%;
+      border: 2px dashed rgba(255,255,255,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .vinyl-center-hole {
+      width: 12px;
+      height: 12px;
+      background: #0f0f0f;
+      border-radius: 50%;
     }
 
     .controls{
@@ -132,10 +177,7 @@
       border-radius:10px;
       cursor:pointer;
     }
-
-    button:hover{
-      border-color:#3b3b3b;
-    }
+    button:hover{ border-color:#3b3b3b; }
 
     .time{
       font-size:12px;
@@ -148,29 +190,7 @@
     }
 
     @media (max-width: 900px){
-      .wrap{
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px){
-      body{
-        padding:16px;
-      }
-
-      .card{
-        padding:14px;
-      }
-
-      .lcdOverlay{
-        border-radius:6px;
-        padding:2px;
-      }
-
-      .lcdLine{
-        font-size:10px;
-        min-height:14px;
-      }
+      .wrap{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -180,16 +200,23 @@
     <div class="card">
       <h1>Alexandra (Reality Club)</h1>
 
-      <div class="arduino">
-        <img src="led.jpg" alt="Arduino LCD" />
-
+      <!-- Bagian Vinyl Turntable + Layar Lirik -->
+      <div class="vinyl-player">
         <div class="lcdOverlay">
           <div class="lcdLine cursor" id="l1">HELLO</div>
           <div class="lcdLine" id="l2">Press Play</div>
         </div>
+
+        <div class="vinyl-container">
+          <div class="vinyl-disc spin" id="vinylDisc">
+            <div class="vinyl-label">
+              <div class="vinyl-center-hole"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="hint">
+      <div class="hint" style="margin-top: 14px;">
         If your day feels out of place, just remember one thing:
         <b>i'm always here for you</b>
       </div>
@@ -208,8 +235,8 @@
       </div>
 
       <div class="hint">
-        This simple version changes the lyrics automatically every few seconds.
-        But honestly, every line reminds me of you. Guess that’s what this song does.
+This simple version changes the lyrics automatically every few seconds.
+But honestly, every line reminds me of you. Guess that’s what this song does.
       </div>
     </div>
   </div>
@@ -221,33 +248,33 @@
       [9.0,  "Or you're looking for", "the old ultraviolence"],
       [15.0, "You're trouble", "yes I knew"],
       [21.0, "Right from...", "the start"],
-      [28.0, "And the labyrinth", "I thought I knew..."],
-      [34.0, "Rearranged..", "to shape anew"],
-      [40.0, "At amazement", "of the excitement"],
+      [28.0,  "And the labyrinth", "I thought I knew..."],
+      [34.0,  "Rearranged..", "to shape anew"],
+      [40.0,  "At amazement", "of the excitement"],
       [46.0, "That once", "rang true"],
       [54.0, "And if I was", "a fool for you"],
-      [61.0, "I'd wait five", "hundred million hours"],
-      [67.0, "On a park bench", "out on the moon"],
+      [61.0,  "I'd wait five", "hundred million hours"],
+      [67.0,  "On a park bench", "out on the moon"],
       [74.0, "But in full view of", "what you are"],
       [80.0, "Oh", "....."],
-      [89.0, "Just like a feline", "with multiple lives"],
-      [96.0, "She lost a couple but", "she used to have five"],
-      [103.0, "A savior", "of mankind"],
+      [89.0,  "Just like a feline", "with multiple lives"],
+      [96.0,  "She lost a couple but", "she used to have five"],
+      [103.0,  "A savior", "of mankind"],
       [111.0, "And if I was", "a fool for you"],
-      [117.0, "I'd wait five", "hundred million hours"],
-      [122.0, "On a park bench", "out on the moon"],
+      [117.0,  "I'd wait five", "hundred million hours"],
+      [122.0,  "On a park bench", "out on the moon"],
       [129.0, "But in full view of", "what you are"],
-      [135.0, "You're a goddess", "you're my rock star"],
-      [143.0, "I fell in love", "with Alexandra"],
+      [135.0,  "You're a goddess", "you're my rock star"],
+      [143.0,  "I fell in love", "with Alexandra"],
       [150.0, "Even though I", "barely met her"],
       [157.0, "Even though we'd", "break our hearts"],
-      [161.0, "Before we'd", "even start..."],
+      [161.0,  "Before we'd", "even start..."],
       [170.0, ".........", "(alunan musik)"],
       [197.0, "And if I was", "a fool for you"],
-      [203.0, "I'd wait five", "hundred million hours"],
-      [210.0, "On a park bench", "out on the moon"],
+      [203.0,  "I'd wait five", "hundred million hours"],
+      [210.0,  "On a park bench", "out on the moon"],
       [217.0, "But in full view of", "what you are"],
-      [225.0, "You're a goddess", "you're my rock star"],
+      [225.0,  "You're a goddess", "you're my rock star"],
       [231.0, "i love u", "bub"]
     ];
 
@@ -255,6 +282,7 @@
     const l1 = document.getElementById('l1');
     const l2 = document.getElementById('l2');
     const clock = document.getElementById('clock');
+    const vinylDisc = document.getElementById('vinylDisc');
 
     const btnPlay = document.getElementById('btnPlay');
     const btnPause = document.getElementById('btnPause');
@@ -262,8 +290,8 @@
 
     function fmt(sec){
       sec = Math.max(0, Math.floor(sec || 0));
-      const m = String(Math.floor(sec / 60)).padStart(2, '0');
-      const s = String(sec % 60).padStart(2, '0');
+      const m = String(Math.floor(sec/60)).padStart(2,'0');
+      const s = String(sec%60).padStart(2,'0');
       return `${m}:${s}`;
     }
 
@@ -321,7 +349,7 @@
 
     function pickLyricIndex(t){
       let pick = 0;
-      for(let i = 0; i < lyrics.length; i++){
+      for(let i=0; i<lyrics.length; i++){
         if(t >= lyrics[i][0]) pick = i;
       }
       return pick;
@@ -346,6 +374,15 @@
       audio.play();
     });
 
+    audio.addEventListener('play', () => {
+      vinylDisc.classList.add('playing');
+      updateByTime();
+    });
+
+    audio.addEventListener('pause', () => {
+      vinylDisc.classList.remove('playing');
+    });
+
     audio.addEventListener('loadedmetadata', () => {
       clock.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
       lastPick = -1;
@@ -357,11 +394,8 @@
       updateByTime();
     });
 
-    audio.addEventListener('play', () => {
-      updateByTime();
-    });
-
     audio.addEventListener('ended', () => {
+      vinylDisc.classList.remove('playing');
       stopTyping();
     });
   </script>
